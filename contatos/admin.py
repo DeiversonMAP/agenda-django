@@ -12,5 +12,6 @@ class ContatoAdmin(admin.ModelAdmin):
     search_fields = ('nome', 'sobrenome', 'categoria')
     list_editable = ('telefone','mostrar')
     
+    
 admin.site.register(Categoria) 
 admin.site.register(Contato, ContatoAdmin)
