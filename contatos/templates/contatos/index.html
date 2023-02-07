@@ -5,8 +5,8 @@
   <table class="table">
     <thead>
       <tr>
+        <th>#</th>
         <th>Nome</th>
-        <th>Sobrenome</th>
         <th>Telefone</th>
         <th>Categoria</th>
       </tr>
@@ -14,16 +14,16 @@
     <tbody>
       {% for contato in contatos %} 
 
-        {% if contato.mostrar %}
+        {% comment %} {% if contato.mostrar %} {% endcomment %}  {% comment %} if retirado devido ao filtro adicionado na views {% endcomment %}
           <tr>
+            <td>{{contato.id}}</td>
             <td>
-              <a href="{% url 'ver_contato' contato.id  %}"> {{contato.nome}}</a>
+              <a href="{% url 'ver_contato' contato.id  %}"> {{contato.nome}} {{contato.sobrenome}}</a>
             </td>
-            <td>{{contato.sobrenome}}</td>
             <td>{{contato.telefone}}</td>
             <td>{{contato.categoria.nome}}</td>
           </tr>
-        {% endif %}
+        {% comment %} {% endif %} {% endcomment %}
 
       {% endfor %}
     </tbody>
