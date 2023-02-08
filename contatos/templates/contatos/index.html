@@ -35,7 +35,7 @@
       {% if contatos.has_previous %}
         <li class="page-item">
           <a class="page-link"
-            href="?p={{ contatos.previous_page_number }}">Previous</a>
+            href="?p={{ contatos.previous_page_number }}&termo={{ request.GET.termo }}">Previous</a>
         </li>
       {% endif %}
 
@@ -47,7 +47,7 @@
           </li>      
         {% else %}
           <li class="page-item">
-            <a class="page-link" href="?p={{pagina}}">{{pagina}}</a>
+            <a class="page-link" href="?p={{pagina}}&termo={{ request.GET.termo }}">{{pagina}}</a>
           </li>
         {% endif %}
 
@@ -55,7 +55,7 @@
       
       {% if contatos.has_next %}
         <li class="page-item">
-          <a class="page-link" href="?p={{ contatos.next_page_number }}">Next</a>
+          <a class="page-link" href="?p={{ contatos.next_page_number }}&termo={{ request.GET.termo }}">Next</a>
         </li>
       {% endif %}
 
