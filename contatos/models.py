@@ -20,6 +20,10 @@ class Contato(models.Model):
     descricao = models.TextField(blank=True)
     categoria = models.ForeignKey(Categoria, on_delete=models.DO_NOTHING)
     mostrar = models.BooleanField(default=True)
+    foto = models.ImageField(
+                            blank=True,
+                            upload_to='fotos/%Y/%m/%d' # cria uma pasta para cada dia em que acontecer um upload
+                            )                           # posso configurar da forma que eu desejar
 
     def __str__(self) -> str: 
         return f'{self.nome.title()} {self.sobrenome.title()} - {self.categoria.nome}'
