@@ -57,13 +57,13 @@ def busca(request):
         Q(nome_completo__icontains=termo) |
         Q(telefone__contains=termo)
     )
-    
+
     if len(contatos) == 0:
         messages.add_message(request,messages.WARNING,f'Não foi encontrado contato para o termo: {termo}')
 
     paginator = Paginator(contatos,20)
     page = request.GET.get('p')
-    
+
     contatos = paginator.get_page(page)
     return render(request,'contatos/busca.html',{
         'contatos': contatos
