@@ -1,9 +1,10 @@
+from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db.models import (  # importação para poder fazer consultas mais complexas, como utilizar OR nos filtros
     Q, Value)
 from django.db.models.functions import Concat  # Biblioteca de funções SQL
 from django.http import Http404
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 
 from .models import Contato
 
@@ -38,8 +39,12 @@ def ver_contato(request,contato_id):
 def busca(request):
     termo = request.GET.get('termo')
     
-    if termo is None :
-        raise Http404()
+    if termo is None or not termo:
+        messages.add_message(request,messages.ERROR,'Campo termo nao pode ficar vazio.')
+        return redirect('index')
+
+    # if termo is None :
+    #     raise Http404()
     # contatos = Contato.objects.filter(mostrar=True,nome=termo) # Filtrando busca pelo valor passado no termo
     # contatos = Contato.objects.order_by('id').filter(
     #     Q(nome__icontains=termo) | Q(sobrenome__icontains=termo), # Filtrando busca em que contenha o valor passado no termo
@@ -53,6 +58,9 @@ def busca(request):
         Q(telefone__contains=termo)
     )
     
+    if len(contatos) == 0:
+        messages.add_message(request,messages.WARNING,f'Não foi encontrado contato para o termo: {termo}')
+
     paginator = Paginator(contatos,20)
     page = request.GET.get('p')
     
