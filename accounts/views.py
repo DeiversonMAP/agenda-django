@@ -1,4 +1,6 @@
-from django.contrib import messages
+from django.contrib import auth, messages
+from django.contrib.auth.decorators import \
+    login_required  # decorator para dizer que login é necessario para acesso
 from django.contrib.auth.models import User
 from django.core.validators import \
     validate_email  # validador de emails do django
@@ -7,10 +9,27 @@ from django.shortcuts import redirect, render
 
 # Create your views here.
 def login(request):
-    return render(request,'accounts/login.html')
+    if request.method != 'POST':
+        return render(request,'accounts/login.html')    
+    
+    usuario = request.POST.get('usuario')
+    senha = request.POST.get('senha')
+
+    user =auth.authenticate(request,username=usuario,password=senha) #retorna None se estiver incorreto
+    if not user:
+        messages.error(request,'Nome de usuário ou senha inválidos.')
+        return render(request,'accounts/login.html')  
+    else:
+        auth.login(request,user)
+        messages.success(request,'Logado com sucesso!')
+        return redirect('dashboard')
 
 def logout(request):
-    return render(request,'accounts/logout.html')
+    if request.method != 'POST':
+        return render(request,'accounts/dashboard.html')
+    auth.logout(request)
+    messages.success(request,'Logout feito com sucesso')
+    return redirect('login')
 
 def register(request):
     if request.method != 'POST':
@@ -58,5 +77,6 @@ def register(request):
     user.save()
     return redirect('login')
 
+@login_required(redirect_field_name='login')
 def dashboard(request):
     return render(request,'accounts/dashboard.html')
