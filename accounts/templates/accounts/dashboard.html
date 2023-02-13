@@ -1,4 +1,7 @@
 {% extends "base.html" %} 
+{% block titulo %}
+Dashboard de {{user}} |
+{% endblock titulo %}
 {% block conteudo %}
 {% include "parcials/_messages.html" %} 
 <h1>Olá {{ user.first_name }} {{ user.last_name }}, seja bem vindo!</h1>
@@ -14,8 +17,7 @@
 <p>
     Seu e-mail é {{ user.email }}
 </p>
-<form class="mt-3" method="POST" action="{% url 'logout' %}">
-    {% csrf_token %} 
+<form class="mt-3" action="{% url 'logout' %}">
     <button type="submit" class="btn btn-primary">Sair</button>
 </form>
 {% endblock conteudo %}

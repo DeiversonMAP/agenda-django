@@ -25,8 +25,6 @@ def login(request):
         return redirect('dashboard')
 
 def logout(request):
-    if request.method != 'POST':
-        return render(request,'accounts/dashboard.html')
     auth.logout(request)
     messages.success(request,'Logout feito com sucesso')
     return redirect('login')
