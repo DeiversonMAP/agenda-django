@@ -6,6 +6,8 @@ from django.core.validators import \
     validate_email  # validador de emails do django
 from django.shortcuts import redirect, render
 
+from .models import FormContato
+
 
 # Create your views here.
 def login(request):
@@ -77,4 +79,24 @@ def register(request):
 
 @login_required(redirect_field_name='login')
 def dashboard(request):
-    return render(request,'accounts/dashboard.html')
+    if request.method != 'POST':
+        form = FormContato()
+        return render(request,'accounts/dashboard.html',{'form':form})
+    
+    form = FormContato(request.POST,request.FILES)
+    
+    # if form.is_valid(): form.save() # validação do próprio django
+    
+    if not form.is_valid():
+        messages.error(request,"Erro ao enviar formulário.")
+        form = FormContato(request.POST)
+        return render(request,'accounts/dashboard.html',{'form':form})
+    
+    if len(descricao := request.POST.get('descricao')) <5:
+        messages.error(request,"Descrição precisa ter mais que 5 caracteres.")
+        form = FormContato(request.POST)
+        return render(request,'accounts/dashboard.html',{'form':form})
+
+    form.save() # salvar o formulário
+    messages.success(request,f"Contato {request.POST.get('nome')} salvo com sucesso!!")
+    return redirect('dashboard')
